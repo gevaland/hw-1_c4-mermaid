@@ -2,25 +2,49 @@ C4Context
     accTitle: Web Application Container
     accDescr: Components
 
-    Person(person, "Customer", "Customer who is buying a product online")
+    Person(person, "Customer", "Customer who want to check ethcis of companies")
 
-    Container_Boundary(webApp, "Web Application", "") {
-        Component(landingApp, "Homepage", "HTML", "Landing")
-        Component(searchApp, "Search", "HTML", "Search")
-        Component(productApp, "Product Details", "HTML", "Product Details")
-        Component(orderApp, "Orders", "HTML", "Orders")
+    ContainerDb(dwh, "Hadoop", "HDFS", "Data Warehouse")
+    Container(kafka, "Kafka", "Kafka", "Message broker")
+
+    Container_Boundary(webApp, "Mobile Application", "") {
+        Component(sendTextToChat, "Chat message", "Swift", "Text request")
+        Component(sendImageToChat, "Chat image", "Swift", "Image request")
+        Component(getAnswerApp, "Get answer in application", "Swift", "Get answer app")
     }
 
-    System_Ext(cms, "CMS", "Content Management System")
-    Container(searchApi, "Search API", "API Gateway", "API that provides product filtering")
-    Container(productApi, "Product API", "API Gateway", "API that manages product details")
-    Container(orderApi, "Orders API", "API Gateway", "API that manages customer orders")
+    Container_Boundary(api, "API Application", "") {
+        Component(sendTextToKafka, "Send text", "JSON", "Send text")
+        Component(sendImageToKafka, "Send image", "JSON", "Send image")
+        Component(getAnswer, "Get answer", "JSON", "Get answer")
+    }
 
-    Rel(person, landingApp, "Visits /", "HTTPS")
-    Rel(landingApp, cms, "Makes calls to")
-    Rel(person, searchApp, "Visits /search", "HTTPS")
-    Rel(searchApp, searchApi, "Makes calls to", "JSON/HTTPS")
-    Rel(person, productApp, "Visits /product/{id}", "HTTPS")
-    Rel(productApp, productApi, "Makes calls to", "JSON/HTTPS")
-    Rel(person, orderApp, "Visits /basket", "HTTPS")
-    Rel(orderApp, orderApi, "Makes calls to", "JSON/HTTPS")
+    Container_Boundary(spark, "Spark", "") {
+        Component(getData, "Get Data", "JSON", "Get Data from Kafka")
+        Component(processText, "Process Text", "JSON", "Process Text")
+        Component(processImage, "Process Image", "JSON", "Process Image")
+        Component(preparedData, "Prepared Data", "JSON", "Prepared Data")
+        Component(makePrediction, "Predict", "JSON", "Predict")
+    }
+
+    Rel(person, sendTextToChat, "Visits", "RPC-JSON")
+    Rel(person, sendImageToChat, "Visits", "RPC-JSON")
+    Rel(person, getAnswerApp, "Gets", "RPC-JSON")
+
+    Rel(sendTextToChat, sendTextToKafka, "Sends to", "JSON")
+    Rel(sendImageToChat, sendImageToKafka, "Sends to", "JSON")
+    Rel(getAnswerApp, getAnswer, "Reads from", "JSON")
+
+    Rel(sendTextToKafka, kafka, "Writes to", "Kafka")
+    Rel(sendImageToKafka, kafka, "Writes to", "Kafka")
+    Rel(getAnswer, kafka, "Reads from", "Kafka")
+
+    Rel(getData, kafka, "Reads from", "Kafka")
+    Rel(processText, getData, "Reads from", "SPARK")
+    Rel(processImage, getData, "Reads from", "SPARK")
+    Rel(preparedData, processImage, "Reads from", "SPARK")
+    Rel(preparedData, processText, "Reads from", "SPARK")
+    Rel(preparedData, dwh, "Writes to", "HDFS")
+    Rel(preparedData, makePrediction, "Make call", "SPARK")
+    Rel(makePrediction, kafka, "Save to", "Kafka")
+
