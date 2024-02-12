@@ -105,15 +105,20 @@ C4Context
             Component(api, "FastAPI", "JSON/HTTPS", "API for interacting with DWH")
             Component(ASGI, "Uvicorn webserver", "JSON/HTTPS", "webserver running Fastapi")
         }
-    
+
+        Container_Boundary(ETL, "ETL", "") {
+            Component(etlBackend, "ETL processes", "Spark", "Updates DWH with new data")
+            Component(mlBackend, "ML model inference", "HuggingFace", "Processes news with HF pipe")
+        }
+
         Component(dwh, "MySQL DWH", "SQL", "Data storage")
-        Component(reportBackend, "Report compiler", "SQL / Python", "Compiles requested data into a report")
-        Component(etlBackend, "ETL processes", "Python / SQL", "Updates DWH with new data")
+        Component(reportBackend, "Report compiler", "Spark / Python / SQL", "Compiles requested data into a report")
     }
     
 
     Container(authModule, "User Authorization", "", "Confirms subscription tier to authorize access")
     Container(etlApi, "Data API", "API Gateway", "API that provides new data for DWH")
+    Container(scheduler, "ETL pipeline manager", "gRPC", "Dagster - schedule / execute data pipelines")
 
     Rel(person, landingApp, "Visits /", "HTTPS")
     Rel(person, searchApp, "Visits /", "HTTPS")
@@ -129,8 +134,12 @@ C4Context
     Rel(reportBackend, api, "Returns report data", "JSON/.xlsx")
     Rel(api, landingApp, "Update webpage", "HTTPS")
     
+    Rel(scheduler, etlBackend, "Call for update", "gRPC")
     Rel(etlApi, etlBackend, "New data", "HTTPS/JSON")
+    Rel(etlBackend, mlBackend, "Raw data", "JSON")
+    Rel(mlBackend, etlBackend, "Processed data", "JSON")
     Rel(etlBackend, dwh, "Load processed data", "SQL")
+
     
     
     
