@@ -1,16 +1,24 @@
 C4Context
-    accTitle: Shop System
+    accTitle: Pharmacists' Performance Assessment Service
     accDescr: Containers
 
-    Person(person, "Customer", "Customer who is buying a product online")
+    Person(person, "Customer", "Network Format Development Department")
 
-    System_Boundary(webApp, "Shop", "Allows customers to search, view and purchase products") {
-        Container(webApp, "Web Application", "HTML", "Web frontend for buying a product")
+    System_Boundary(app, "Pharmacists' Performance Assessment Service", "Allows customers to search, view and purchase products") {
+        Container(app, "Application", "HTML", "Web frontend for requesting for ratings and indicators")
         Container(api, "API Application", "API Gateway", "API that manages product details")
-        ContainerDb(db, "Database", "DynamoDB", "Tables to store product and customer data")
+        ContainerDb(db, "HDFS", "HDFS",  "Tables for storing pharmacy and pharmacist data")
+        Container(spark, "Spark", "Spark", "Data processing, training and predicting")
+        Container(kafka, "Kafka", "Kafka", "Message broker")
+        Container(apiData, "API for data collection", "HTTP", "Data collection functionality")
 
-        Rel(webApp, api, "Makes calls to", "JSON-RPC")
-        Rel(api, db, "Reads and writes to", "JSON-RPC")
+        Rel(app, api, "Makes calls to", "JSON-RPC")
+        Rel(api, db, "Reads and writes to")
+        Rel(db, spark, "Reads and writes to")
+        Rel(spark, kafka, "Writes to")
+        Rel(apiData, kafka, "Writes to")
+        Rel(api, apiData, "Requests cash registers data")
+        Rel(apiData, db, "Writes to")
     }
 
-    Rel(person, webApp, "Visits", "JSON-RPC")
+    Rel(person, app, "Visits", "JSON-RPC")

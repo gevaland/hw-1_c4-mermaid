@@ -12,12 +12,9 @@
 
 ![](c4-components.svg)
 
-# UML UC + SysML REQ
+# UML UC
 
 ## Use Cases
 
 ![](uml-usecases.svg)
 
-## Requirements
-
-![](sysml-requirements.svg)

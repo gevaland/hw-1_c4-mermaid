@@ -1,2 +1,7 @@
 flowchart TD
-    A[Customer] --> B(Go shopping)
+    User[Отдел развития форматов сети] --- get_results(Получить результаты оценивания)
+    get_results(Получить результаты оценивания) -->|include| get_pharmacy(Получить результаты по аптекам)
+    get_pharmacy(Получить результаты по аптекам) -->|include| get_clusters(Получить информацию о кластерах)
+    get_results(Получить результаты оценивания) -->|include| get_pharmacist(Получить результаты по первостольникам)
+    get_pharmacist(Получить результаты по первостольникам) -->|include| get_features(Получить показатели)
+    get_pharmacist(Получить результаты по первостольникам) -->|include| get_scores(Получить оценки)
