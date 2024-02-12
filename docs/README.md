@@ -12,7 +12,7 @@
 
 ![](c4-components.svg)
 
-# UML UC + SysML REQ
+# UML UC
 
 ## Use Cases
 
