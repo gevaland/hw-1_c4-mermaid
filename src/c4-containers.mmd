@@ -1,16 +1,23 @@
 C4Context
-    accTitle: Shop System
+    accTitle: Expert nutritionist system
     accDescr: Containers
 
-    Person(person, "Customer", "Customer who is buying a product online")
+    Person(person, "User", "A user who needs nutrition recommendations")
 
-    System_Boundary(webApp, "Shop", "Allows customers to search, view and purchase products") {
-        Container(webApp, "Web Application", "HTML", "Web frontend for buying a product")
+    System_Boundary(webApp, "Nutrition Application", "Allows users to get nutrition recommendations and recognize additives in the product composition") {
+        Container(webApp, "Mobile Application", "Swift", "App for getting recommendations")
         Container(api, "API Application", "API Gateway", "API that manages product details")
-        ContainerDb(db, "Database", "DynamoDB", "Tables to store product and customer data")
+
+        Container(kafka, "Kafka", "Kafka", "Message broker")
+        Container(spark, "Spark", "Spark", "Data processing and model training")
+        ContainerDb(db, "Hadoop", "HDFS", "Tables to store users data")
 
         Rel(webApp, api, "Makes calls to", "JSON-RPC")
-        Rel(api, db, "Reads and writes to", "JSON-RPC")
+        Rel(api, db, "Reads and writes to", "HDFS")
+
+        Rel(api, kafka, "Write to", "Kafka")
+        Rel(spark, kafka, "Reads from", "Kafka")
+        Rel(spark, db, "Reads and writes to", "Spark")
     }
 
     Rel(person, webApp, "Visits", "JSON-RPC")
