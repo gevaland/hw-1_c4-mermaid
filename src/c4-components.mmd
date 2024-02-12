@@ -1,26 +1,54 @@
 C4Context
-    accTitle: Web Application Container
+    accTitle: Pharmacists' Performance Assessment Service
     accDescr: Components
 
-    Person(person, "Customer", "Customer who is buying a product online")
+    Person(person, "Customer", "Network Format Development Department")
 
-    Container_Boundary(webApp, "Web Application", "") {
-        Component(landingApp, "Homepage", "HTML", "Landing")
-        Component(searchApp, "Search", "HTML", "Search")
-        Component(productApp, "Product Details", "HTML", "Product Details")
-        Component(orderApp, "Orders", "HTML", "Orders")
+    Container_Boundary(webApp, "Web Application",) {
+        Component(PharmacyApp, "Pharmacy indicators", "HTML")
+        Component(PharmacistApp, "Pharmacists ratings and indicators", "HTML")
     }
 
-    System_Ext(cms, "CMS", "Content Management System")
-    Container(searchApi, "Search API", "API Gateway", "API that provides product filtering")
-    Container(productApi, "Product API", "API Gateway", "API that manages product details")
-    Container(orderApi, "Orders API", "API Gateway", "API that manages customer orders")
+    Container_Boundary(api, "API Application") {
+        Component(getRating, "Get Rating", "JSON", "Get Rating of pharmacists")
+        Component(getPharmacyIndicators, "Get Pharmacy Indicators", "JSON", "Get indicators of pharmacies")
+        Component(getPharmacisIndicators, "Get Pharmacist Indicators", "JSON", "Get indicators of pharmacists")
+    }
 
-    Rel(person, landingApp, "Visits /", "HTTPS")
-    Rel(landingApp, cms, "Makes calls to")
-    Rel(person, searchApp, "Visits /search", "HTTPS")
-    Rel(searchApp, searchApi, "Makes calls to", "JSON/HTTPS")
-    Rel(person, productApp, "Visits /product/{id}", "HTTPS")
-    Rel(productApp, productApi, "Makes calls to", "JSON/HTTPS")
-    Rel(person, orderApp, "Visits /basket", "HTTPS")
-    Rel(orderApp, orderApi, "Makes calls to", "JSON/HTTPS")
+    Container_Boundary(apiData, "API for data collection") {
+        Component(getCRData, "Get Rating", "JSON", "Get data from cash registers")
+    }
+
+    Container_Boundary(spark, "Spark") {
+        Component(getData, "Get Data", "JSON", "Get Data from HDFS")
+        Component(processData, "Process Data", "JSON", "Process Data")
+        Component(makeScore, "Make Scores", "JSON", "Making pharmacists' scores")
+        Component(makeClustering, "Make clusters", "JSON", "Making clusters of pharmacies")
+        Component(modelFit, "Fit model", "JSON", "Fitting model")
+    }
+
+    ContainerDb(dwh, "HDFS", "HDFS")
+    Container(kafka, "Kafka", "Kafka", "Message broker")
+
+
+    Rel(person, PharmacyApp, "Pharmacy /", "HTTPS")
+    Rel(person, PharmacistApp, "Pharmacist /", "HTTPS")
+    Rel(PharmacyApp, getPharmacyIndicators, "Makes calls to")
+    Rel(PharmacistApp, getPharmacisIndicators, "Makes calls to")
+    Rel(PharmacistApp, getRating, "Makes calls to")
+    Rel(getPharmacyIndicators, getData, "Requests data")
+    Rel(getPharmacyIndicators, getCRData, "Requests data")
+    Rel(getCRData, dwh, "Writes to")
+    Rel(getCRData, kafka, "Writes to")
+    Rel(getData, dwh, "Reads from")
+    Rel(processData, getData, "Reads from")
+    Rel(makeClustering, processData, "Reads from")
+    Rel(makeClustering, kafka, "Writes to")
+    Rel(getPharmacisIndicators, getCRData, "Requests data")
+    Rel(getPharmacisIndicators, getData, "Requests data")
+    Rel(getRating, getCRData, "Requests data")
+    Rel(getRating, getData, "Requests data")
+    Rel(modelFit, processData, "Reads from")
+    Rel(modelFit, kafka, "Writes to")
+    Rel(makeScore, modelFit, "Reads from")
+    Rel(makeScore, kafka, "Writes to")

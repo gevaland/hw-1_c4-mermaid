@@ -18,6 +18,3 @@
 
 ![](uml-usecases.svg)
 
-## Requirements
-
-![](sysml-requirements.svg)

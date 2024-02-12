@@ -1,16 +1,19 @@
 C4Context
-    accTitle: Shop
+    accTitle: Pharmacists' Performance Assessment Service
     accDescr: Context
 
-    Person(person, "Customer", "Customer who is buying a product online")
+    Person(person, "Customer", "Network Format Development Department")
 
-    System(webApp, "Shop", "Allows customers to search, view and purchase products")
-    System_Ext(emailPlatform, "Email Platform", "Email marketing platform")
-    System_Ext(cdp, "Customer Data Platform", "Customer profiling")
-    System(dwh, "Data Warehouse", "Reporting and data insights")
+    System(system, "System", "Allows users to get estimates of the work of pharmacists and the indicators used")
+    System(apiApplication, "API for data collection", "Provides data collection functionality via HTTP API")
+    System_Ext(CashRegister, "Cash register data platform", "Provides access to data from cash registers")
+    System(dwh, "Data Warehouse", "Storing data")
 
-    Rel(person, webApp, "Search, view and purchase products", "JSON-RPC")
-    Rel(webApp, cdp, "Send customer interaction and domain events to")
-    Rel(cdp, emailPlatform, "Send email using")
-    Rel(emailPlatform, person, "Sends email to", "SMTP")
-    Rel(webApp, dwh, "Domain events", "Broker")
+    Rel(person, system, "Request for ratings and indicators")
+    Rel(system, person, "Send ratings and indicators", "XLSX")
+    Rel(system, dwh, "Request data")
+    Rel(dwh, system, "Send data",)
+    Rel(system, apiApplication, "Makes API calls to")
+    Rel(apiApplication, CashRegister, "Send a request to receive data", "HTTP")
+    Rel(CashRegister, dwh, "Send data")
+
