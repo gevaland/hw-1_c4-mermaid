@@ -1,0 +1,37 @@
+name: Generate SVG from Mermaid
+
+on:
+  push:
+    paths:
+      - 'src/*.mmd'
+
+jobs:
+  mermaid-to-svg:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Mermaid CLI
+        run: npm install -g @mermaid-js/mermaid-cli
+
+      - name: Generate SVG images
+        run: |
+          mkdir -p ./docs/
+          mmdc -i ./src/c4-components.mmd -o ./docs/c4-components.svg
+          mmdc -i ./src/c4-containers.mmd -o ./docs/c4-containers.svg
+          mmdc -i ./src/c4-context.mmd -o ./docs/c4-context.svg
+          mmdc -i ./src/mindmap.mmd -o ./docs/mindmap.svg
+
+      - name: Commit and push if changed
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add ./docs/*.svg
+          git commit -m "Automatically updated SVG diagrams" || echo "No changes to commit"
+          git push

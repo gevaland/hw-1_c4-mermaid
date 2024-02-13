@@ -1,16 +1,17 @@
 C4Context
-    accTitle: Shop System
-    accDescr: Containers
-
-    Person(person, "Customer", "Customer who is buying a product online")
-
-    System_Boundary(webApp, "Shop", "Allows customers to search, view and purchase products") {
-        Container(webApp, "Web Application", "HTML", "Web frontend for buying a product")
-        Container(api, "API Application", "API Gateway", "API that manages product details")
-        ContainerDb(db, "Database", "DynamoDB", "Tables to store product and customer data")
-
-        Rel(webApp, api, "Makes calls to", "JSON-RPC")
-        Rel(api, db, "Reads and writes to", "JSON-RPC")
+    title Агрегатор мероприятий MorePost - L2
+    Person(user, "Пользователь", "Использует Telegram бота или мобильное приложение для получения дайджеста мероприятий")
+    System_Boundary(morepost, "MorePost") {
+        Container(userApp, "Приложения пользователя", "Flutter, Python", "Позволяет пользователям получать дайджесты мероприятий и настраивать уведомления")
+        Container(backend, "Бэкенд", "FastAPI", "Обрабатывает запросы от пользовательских интерфейсов")
+        Container(parsers, "Парсеры", "Python", "Агрегируют данные из социальных сетей")
+        ContainerDb(db, "Хранилища данных", "PostgreSQL, HDFS", "Хранит сырые и обработанные данные")
+        Container(mlModels, "ML модели", "Python, PyTorch", "Классифицируют и суммаризируют мероприятия, данные для обучения хранит в HDFS")
     }
-
-    Rel(person, webApp, "Visits", "JSON-RPC")
+    System_Ext(social, "Социальные сети", "Источник мероприятий: VK, Telegram")
+    Rel(user, userApp, "Использует")
+    Rel(userApp, backend, "Отправляет запросы")
+    Rel(backend, db, "Использует обработанные данные")
+    Rel(parsers, social, "Агрегирует данные")
+    Rel(parsers, mlModels, "Отправляет данные для обработки")
+    Rel(mlModels, db, "Сохраняет обработанные данные и данные для обучения")

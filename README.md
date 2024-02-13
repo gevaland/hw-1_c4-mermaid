@@ -1,16 +1,4 @@
-# UC+REQ & C4 Model using Mermaid
+## Homework 1 - Mindmap & C4 Model L1-2-3 Diagram
 
-FYI: https://mermaid.js.org/syntax/c4.html
-
-## Generate
-
-Generate diagrams:
-
-```
-npm install
-node src2docs.js
-```
-
-# Limitations
-
-FYI: https://github.com/mermaid-js/mermaid/issues/4628
+- #### The source code of the diagrams in `./src/` and a text description of how to generate documentation in ./README.md if generation is required
+- #### The resulting documentation files in `./docs/README.md` and SVG resources in `./docs/.svg`, or PNG in `./docs/.png`.
