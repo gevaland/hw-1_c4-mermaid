@@ -1,16 +1,14 @@
 C4Context
-    accTitle: Shop
-    accDescr: Context
-
-    Person(person, "Customer", "Customer who is buying a product online")
-
-    System(webApp, "Shop", "Allows customers to search, view and purchase products")
-    System_Ext(emailPlatform, "Email Platform", "Email marketing platform")
-    System_Ext(cdp, "Customer Data Platform", "Customer profiling")
-    System(dwh, "Data Warehouse", "Reporting and data insights")
-
-    Rel(person, webApp, "Search, view and purchase products", "JSON-RPC")
-    Rel(webApp, cdp, "Send customer interaction and domain events to")
-    Rel(cdp, emailPlatform, "Send email using")
-    Rel(emailPlatform, person, "Sends email to", "SMTP")
-    Rel(webApp, dwh, "Domain events", "Broker")
+    title Агрегатор мероприятий MorePost - L1
+    Person(user, "Пользователь", "Использует Telegram бота или мобильное приложение для получения дайджеста мероприятий")
+    System_Boundary(morepost, "MorePost") {
+        System(aggregator, "Event Aggregator", "Обработка и агрегация мероприятий из социальных сетей")
+        SystemDb(db, "Хранилища данных", "PostgreSQL, HDFS", "Хранит сырые и обработанные данные мероприятий и сообществ")
+        System_Ext(ml, "ML модели", "Классифицируют и суммаризируют мероприятия")
+    }
+    System_Ext(social, "Социальные сети", "Источник мероприятий: VK, Telegram")
+    Rel(user, aggregator, "Использует")
+    Rel(aggregator, social, "Парсит сообщества")
+    Rel(aggregator, db, "Сохраняет/читает данные")
+    Rel(aggregator, ml, "Использует для классификации и суммаризации")
+    Rel_R(ml, db, "Использует данные для дообучения, данные хранятся в HDFS")
