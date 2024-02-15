@@ -1,26 +1,80 @@
-C4Context
-    accTitle: Web Application Container
-    accDescr: Components
+C4Component
+title Компонентная модель для Hadoop и Kafka
 
-    Person(person, "Customer", "Customer who is buying a product online")
+Person(user, "Пользователь", "Использует телеграм-бот для получения рекомендаций по рекламным каналам")
+System_Ext(tg_channels, "Телеграм Каналы", "Источник данных для анализа и рекомендаций")
 
-    Container_Boundary(webApp, "Web Application", "") {
-        Component(landingApp, "Homepage", "HTML", "Landing")
-        Component(searchApp, "Search", "HTML", "Search")
-        Component(productApp, "Product Details", "HTML", "Product Details")
-        Component(orderApp, "Orders", "HTML", "Orders")
+Boundary(b1, "Периметр системы") {
+    Container_Boundary(hadoop, "Hadoop Ecosystem") {
+        Component(hdfs, "HDFS")
+        Component(yarn, "YARN")
+        Component(spark, "Spark")
     }
 
-    System_Ext(cms, "CMS", "Content Management System")
-    Container(searchApi, "Search API", "API Gateway", "API that provides product filtering")
-    Container(productApi, "Product API", "API Gateway", "API that manages product details")
-    Container(orderApi, "Orders API", "API Gateway", "API that manages customer orders")
+    Container_Boundary(parser, "Парсер каналов") {
+        Component(queue_adapter_parser, "Queue Adapter")
+        Component(parser_component, "Parser")
+    }
 
-    Rel(person, landingApp, "Visits /", "HTTPS")
-    Rel(landingApp, cms, "Makes calls to")
-    Rel(person, searchApp, "Visits /search", "HTTPS")
-    Rel(searchApp, searchApi, "Makes calls to", "JSON/HTTPS")
-    Rel(person, productApp, "Visits /product/{id}", "HTTPS")
-    Rel(productApp, productApi, "Makes calls to", "JSON/HTTPS")
-    Rel(person, orderApp, "Visits /basket", "HTTPS")
-    Rel(orderApp, orderApi, "Makes calls to", "JSON/HTTPS")
+    Container_Boundary(recSys, "Рекомендательная система") {
+        Component(queue_adapter_recsys, "Queue Adapter")
+        Component(embedder, "Embedder")
+        ComponentDb(vector_db, "VectorDB")
+        ComponentDb(cache, "Cache")
+    }
+
+    Container_Boundary(tg_bot, "Телеграм Бот") {
+        Component(tg_bot_component, "TG Bot")
+        Component(queue_adapter_bot, "Queue Adapter")
+    }
+
+    Container_Boundary(kafka, "Kafka Ecosystem") {
+        Component(broker, "Broker")
+        Component(topic, "Topic")
+        Component(producer, "Producer")
+        Component(consumer, "Consumer")
+        Component(streams, "Kafka Streams")
+    }
+
+    Rel(user, tg_bot_component, "Интерактивное взаимодействие для получения рекомендаций")
+    Rel(parser_component, queue_adapter_parser, "Отправляет собранные данные")
+    Rel(queue_adapter_parser, producer, "")
+    Rel(queue_adapter_parser, consumer, "")
+    Rel(consumer, queue_adapter_recsys, "Читает данные из Kafka")
+    Rel(queue_adapter_recsys, producer, "")
+    Rel(embedder, vector_db, "Хранит векторизованные данные")
+    Rel(tg_bot_component, queue_adapter_bot, "Запрашивает рекомендации для пользователя")
+    Rel(queue_adapter_bot, producer, "")
+    Rel(queue_adapter_bot, consumer, "")
+    Rel(vector_db, cache, "Кэширует часто запрашиваемые данные для ускорения доступа")
+    Rel(cache, queue_adapter_recsys, "")
+    Rel(tg_channels, parser_component, "Источник данных для парсинга")
+    Rel(parser_component, hdfs, "Сохраняет сырые данные в HDFS для долгосрочного хранения")
+    Rel(spark, hdfs, "Читает данные из HDFS для обработки")
+    Rel(spark, vector_db, "Загружает обработанные векторы в VectorDB")
+    Rel(producer, topic, "Публикует данные в определенные топики Kafka")
+    Rel(producer, broker, "Отправляет сообщения")
+    Rel(broker, consumer, "Тянет сообщения")
+    Rel(consumer, topic, "Подписывается на топики для чтения данных")
+    Rel(consumer, spark, "Читает потоки данных из Kafka в Spark для обработки")
+    Rel(streams, broker, "Обрабатывает данные в Kafka, используя Kafka Streams, и генерирует новые потоки данных")
+    Rel(spark, yarn, "Использует YARN для управления ресурсами и распределения задач по кластеру")
+    Rel(yarn, hdfs, "Координирует выполнение задач, взаимодействующих с HDFS")
+    UpdateRelStyle(user, tg_bot_component, $textColor="Black", $lineColor="black", $offsetX="-340", $offsetY="-300")
+    UpdateRelStyle(parser_component, queue_adapter_parser, $textColor="Black", $lineColor="black", $offsetX="0", $offsetY="0")
+    UpdateRelStyle(queue_adapter_parser, producer, $textColor="Black", $lineColor="black", $offsetX="-80", $offsetY="300")
+    UpdateRelStyle(consumer, queue_adapter_recsys, $textColor="Black", $lineColor="black", $offsetX="-150", $offsetY="0")
+    UpdateRelStyle(queue_adapter_recsys, embedder, $textColor="Black", $lineColor="black", $offsetX="-80", $offsetY="50")
+    UpdateRelStyle(embedder, vector_db, $textColor="Black", $lineColor="black", $offsetX="-100", $offsetY="-80")
+    UpdateRelStyle(tg_bot_component, queue_adapter_bot, $textColor="Black", $lineColor="black", $offsetX="50", $offsetY="0")
+    UpdateRelStyle(queue_adapter_bot, queue_adapter_recsys, $textColor="Black", $lineColor="black", $offsetX="50", $offsetY="50")
+    UpdateRelStyle(vector_db, cache, $textColor="Black", $lineColor="black", $offsetX="-180", $offsetY="60")
+    UpdateRelStyle(cache, queue_adapter_bot, $textColor="Black", $lineColor="black", $offsetX="130", $offsetY="30")
+    UpdateRelStyle(consumer, topic, $textColor="Black", $lineColor="black", $offsetX="100", $offsetY="30")
+    UpdateRelStyle(spark, hdfs, $textColor="Black", $lineColor="black", $offsetX="0", $offsetY="-50")
+    UpdateRelStyle(spark, yarn, $textColor="Black", $lineColor="black", $offsetX="0", $offsetY="30")
+    UpdateRelStyle(yarn, hdfs, $textColor="Black", $lineColor="black", $offsetX="-50", $offsetY="50")
+    UpdateRelStyle(producer, broker, $textColor="Black", $lineColor="black", $offsetX="-100", $offsetY="10")
+    UpdateRelStyle(broker, consumer, $textColor="Black", $lineColor="black", $offsetX="-100", $offsetY="0")
+}
+

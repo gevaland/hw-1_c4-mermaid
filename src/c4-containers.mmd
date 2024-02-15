@@ -1,16 +1,29 @@
 C4Context
-    accTitle: Shop System
+    accTitle: Бот для рекомендаций
     accDescr: Containers
+    Person(user, "Пользователь", "Использует телеграм-бот для получения рекомендаций по рекламным каналам")
+    Boundary(b1, "Периметр системы") {
+        System(tg_bot, "Телеграм Бот", "Бот, предлагающий оптимальные каналы для рекламы на основе анализа данных")        
+        System_Ext(RecSys, "Рекомендательная система", "Подбирает наиболее подходящий канал")
 
-    Person(person, "Customer", "Customer who is buying a product online")
+        System_Ext(hadoop, "Hadoop", "Система для хранения и обработки больших объемов данных")
 
-    System_Boundary(webApp, "Shop", "Allows customers to search, view and purchase products") {
-        Container(webApp, "Web Application", "HTML", "Web frontend for buying a product")
-        Container(api, "API Application", "API Gateway", "API that manages product details")
-        ContainerDb(db, "Database", "DynamoDB", "Tables to store product and customer data")
+        System_Ext(kafka, "Kafka", "Платформа для обработки потоковых данных и обмена сообщениями")
+        System_Ext(parser, "Парсер каналов", "Сборщик данных с каналов")
 
-        Rel(webApp, api, "Makes calls to", "JSON-RPC")
-        Rel(api, db, "Reads and writes to", "JSON-RPC")
     }
 
-    Rel(person, webApp, "Visits", "JSON-RPC")
+    System_Ext(tg_channels, "Телеграм Каналы", "Источник данных для анализа и рекомендаций")
+
+    BiRel(user, tg_bot, "Использует для поиска оптимального канала для рекламы")
+    BiRel(parser, tg_channels, "Парсит и анализирует данные телеграм каналов")
+    Rel(kafka, hadoop, "Получает данные о каналах")
+    Rel(parser, kafka, "Передает данные о каналах")
+    BiRel(RecSys, hadoop, "Создаёт рекомендацию на основе данных")
+    BiRel(tg_bot, RecSys, "Передаёт запрос на получение рекомендаций")
+    UpdateRelStyle(user, tg_bot, $textColor="Black", $lineColor="black", $offsetX="-140", $offsetY="-70")
+    UpdateRelStyle(parser, tg_channels, $textColor="Black", $lineColor="black", $offsetX="100", $offsetY="-100")
+    UpdateRelStyle(kafka, hadoop, $textColor="Black", $lineColor="black", $offsetX="-50", $offsetY="-50")
+    UpdateRelStyle(parser, kafka, $textColor="Black", $lineColor="black", $offsetX="0", $offsetY="0")
+    UpdateRelStyle(RecSys, hadoop, $textColor="Black", $lineColor="black", $offsetX="-200", $offsetY="30")
+    UpdateRelStyle(tg_bot, RecSys, $textColor="Black", $lineColor="black", $offsetX="-150", $offsetY="50")

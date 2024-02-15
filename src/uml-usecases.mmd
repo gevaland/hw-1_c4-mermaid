@@ -1,2 +1,9 @@
 flowchart TD
-    A[Customer] --> B(Go shopping)
+    U[fa:fa-users User] -->|Get rec| B(fa:fa-robot Go Bot)
+    B --> C{Select rec}
+    C -->|One| D[First Channel]
+    C -->|Two| E[Second Channel]
+    C -->|Three| F[Third Channel]
+    D --> V(Go go buy advertising)
+    E --> V(Go go buy advertising)
+    F --> V(Go go buy advertising)
