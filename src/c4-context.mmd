@@ -1,16 +1,22 @@
 C4Context
-    accTitle: Shop
+    accTitle: Бот для рекомендаций
     accDescr: Context
 
-    Person(person, "Customer", "Customer who is buying a product online")
+    Person(user, "Пользователь", "Использует телеграм-бот для получения рекомендаций по рекламным каналам")
+    System(tg_bot, "Телеграм Бот", "Бот, предлагающий оптимальные каналы для рекламы на основе анализа данных")
+    System(tg_channels, "Телеграм Каналы", "Источник данных для анализа и рекомендаций")
 
-    System(webApp, "Shop", "Allows customers to search, view and purchase products")
-    System_Ext(emailPlatform, "Email Platform", "Email marketing platform")
-    System_Ext(cdp, "Customer Data Platform", "Customer profiling")
-    System(dwh, "Data Warehouse", "Reporting and data insights")
 
-    Rel(person, webApp, "Search, view and purchase products", "JSON-RPC")
-    Rel(webApp, cdp, "Send customer interaction and domain events to")
-    Rel(cdp, emailPlatform, "Send email using")
-    Rel(emailPlatform, person, "Sends email to", "SMTP")
-    Rel(webApp, dwh, "Domain events", "Broker")
+    Boundary(b1, "Периметр системы") {
+
+        SystemDb_Ext(DB, "DB", "Система для хранения и обработки больших объемов данных")
+        System(tg_bot, "Телеграм Бот", "Бот, предлагающий оптимальные каналы для рекламы на основе анализа данных")
+    }
+
+    BiRel(user, tg_bot, "Использует для поиска оптимального канала для рекламы")
+    Rel(tg_bot, tg_channels, "Использует информацию из каналов для составления рекомендаций")
+    BiRel(tg_bot, DB, "Хранит, получает и отправляет информацию о каналах")
+    BiRel(tg_bot, DB, "Хранит, получает и отправляет информацию о каналах")
+    UpdateRelStyle(user, tg_bot, $textColor="Black", $lineColor="black", $offsetX="-350", $offsetY="-40")
+    UpdateRelStyle(tg_bot, DB, $textColor="Black", $lineColor="black", $offsetX="-100", $offsetY="50")
+    UpdateRelStyle(tg_bot, tg_channels, $textColor="Black", $lineColor="black", $offsetX="50", $offsetY="-50")
