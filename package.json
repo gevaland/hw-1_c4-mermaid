@@ -1,6 +1,0 @@
-{
-    "type": "module",
-    "devDependencies": {
-        "@mermaid-js/mermaid-cli": "^10.2.4"
-    }
-}
