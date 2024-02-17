@@ -1,2 +1,7 @@
 flowchart TD
-    A[Customer] --> B(Go shopping)
+    A[User] --> B(App)
+    B -->|Get personal recommendations| C(Retrieving the news feed)
+    C --> D(Open the full text of the article)
+    C --> E(Like the article)
+    C --> F(Complain about the article)
+    C --> G(Comment on the article)

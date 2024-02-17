@@ -1,16 +1,14 @@
 C4Context
-    accTitle: Shop
+    accTitle: News Feed System
     accDescr: Context
 
-    Person(person, "Customer", "Customer who is buying a product online")
+    Person(person, "User", "User who is reading news")
 
-    System(webApp, "Shop", "Allows customers to search, view and purchase products")
-    System_Ext(emailPlatform, "Email Platform", "Email marketing platform")
-    System_Ext(cdp, "Customer Data Platform", "Customer profiling")
-    System(dwh, "Data Warehouse", "Reporting and data insights")
+    System_Ext(mobileApp, "Mobile Application", "Allows users to view and interact with articles and news feed")
+    System(nfs, "News Feed System", "Compiles a news feed")
+    System_Ext(dwh, "Data Warehouse", "Stores data")
 
-    Rel(person, webApp, "Search, view and purchase products", "JSON-RPC")
-    Rel(webApp, cdp, "Send customer interaction and domain events to")
-    Rel(cdp, emailPlatform, "Send email using")
-    Rel(emailPlatform, person, "Sends email to", "SMTP")
-    Rel(webApp, dwh, "Domain events", "Broker")
+    Rel(person, mobileApp, "View and interact with news")
+    Rel(mobileApp, nfs, "Gets news feed for user")
+    Rel(nfs, dwh, "Retrieves recommendations")
+    Rel(mobileApp, dwh, "Saves user events")

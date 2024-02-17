@@ -1,26 +1,55 @@
 C4Context
-    accTitle: Web Application Container
+    accTitle: News Feed Components
     accDescr: Components
 
-    Person(person, "Customer", "Customer who is buying a product online")
+    Person(person, "User", "User who is reading news")
 
-    Container_Boundary(webApp, "Web Application", "") {
-        Component(landingApp, "Homepage", "HTML", "Landing")
-        Component(searchApp, "Search", "HTML", "Search")
-        Component(productApp, "Product Details", "HTML", "Product Details")
-        Component(orderApp, "Orders", "HTML", "Orders")
+    System_Ext(mobileApp, "Mobile Application", "Allows users to search, view and interact with articles and news feed")
+    System_Ext(dwh, "Data Warehouse", "Stores data")
+
+    Container(broker, "Broker", "Kafka", "Message broker")
+    ContainerDb(sss, "S3", "MinIO", "Stores articles content")
+    ContainerDb(db, "Database", "pgvector", "Tables to store article and user embeddings")
+
+    Container_Boundary(api, "API Application", "") {
+        Component(extractContent, "Extract Article Content", "JSON", "Extracts articles content")
+        Component(getRecommendation, "Get Recommendations", "SQL", "Extract actual user recommendations")
+        Component(saveEvent, "Save User Events", "SQL", "Saves user events")
+        Component(sendUserEvent, "Send To Kafka", "JSON", "Sends user events to Kafka")
+
+        Rel(getRecommendation, extractContent, "")
     }
 
-    System_Ext(cms, "CMS", "Content Management System")
-    Container(searchApi, "Search API", "API Gateway", "API that provides product filtering")
-    Container(productApi, "Product API", "API Gateway", "API that manages product details")
-    Container(orderApi, "Orders API", "API Gateway", "API that manages customer orders")
+    Container_Boundary(recommender, "Recommender", "") {
+        Component(getEvent, "Get Events", "JSON", "Polls for user events or article creation event")
+        Component(updateRecommendation, "Update Recommendations", "SQL", "Finds the best articles to recommend")
+        Component(updateUserEmbedding, "Update User Embedding", "JSON", "Recalculates user embedding")
+        Component(saveRecommendation, "Save Recommendations", "SQL", "Saves new recommendations")
+    }
 
-    Rel(person, landingApp, "Visits /", "HTTPS")
-    Rel(landingApp, cms, "Makes calls to")
-    Rel(person, searchApp, "Visits /search", "HTTPS")
-    Rel(searchApp, searchApi, "Makes calls to", "JSON/HTTPS")
-    Rel(person, productApp, "Visits /product/{id}", "HTTPS")
-    Rel(productApp, productApi, "Makes calls to", "JSON/HTTPS")
-    Rel(person, orderApp, "Visits /basket", "HTTPS")
-    Rel(orderApp, orderApi, "Makes calls to", "JSON/HTTPS")
+    Container_Boundary(spark, "Spark", "") {
+        Component(getArticle, "Get Article Content", "JSON", "Get unprocessed articles content")
+        Component(processArticle, "Process Article", "JSON", "Gets rid of html tags and creates article embedding")
+        Component(saveArticleEmbedding, "Save Article Embedding", "SQL", "Saves article embedding")
+        Component(sendArticleEvent, "Send To Kafka", "JSON", Sends article creation event to Kafka")
+        
+        Rel(processArticle, getArticle, "")
+        Rel(saveArticleEmbedding, processArticle, "")
+        Rel(sendArticleEvent, processArticle, "")
+    }
+
+    Rel(person, mobileApp, "Uses")
+    Rel(mobileApp, getRecommendation, "")
+    Rel(mobileApp, saveEvent, "")
+    Rel(mobileApp, sendUserEvent, "")
+    Rel(getRecommendation, dwh, "")
+    Rel(extractContent, sss, "")
+    Rel(saveEvent, dwh, "")
+    Rel(sendUserEvent, broker, "")
+    Rel(getEvent, broker, "")
+    Rel(updateRecommendation, db, "")
+    Rel(updateUserEmbedding, db, "")
+    Rel(saveRecommendation, dwh, "")
+    Rel(getArticle, sss, "")
+    Rel(saveArticleEmbedding, db, "")
+    Rel(sendArticleEvent, broker, "")

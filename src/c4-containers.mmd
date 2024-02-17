@@ -1,16 +1,33 @@
 C4Context
-    accTitle: Shop System
+    accTitle: News Feed Containers
     accDescr: Containers
 
-    Person(person, "Customer", "Customer who is buying a product online")
+    Person(person, "User", "User who is reading news")
 
-    System_Boundary(webApp, "Shop", "Allows customers to search, view and purchase products") {
-        Container(webApp, "Web Application", "HTML", "Web frontend for buying a product")
-        Container(api, "API Application", "API Gateway", "API that manages product details")
-        ContainerDb(db, "Database", "DynamoDB", "Tables to store product and customer data")
+    System_Ext(mobileApp, "Mobile Application", "Allows users to view and interact with articles and news feed")
+    System_Ext(dwh, "Data Warehouse", "Stores data")
 
-        Rel(webApp, api, "Makes calls to", "JSON-RPC")
-        Rel(api, db, "Reads and writes to", "JSON-RPC")
+    System_Boundary(nfs, "News Feed System", "Allows users to view and interact with articles and news feed") {
+        Container(api, "API Application", "API Gateway", "API that manages articles visibility and content filling")
+        Container(broker, "Broker", "Kafka", "Message broker")
+        Container(recommender, "Recommender", "Go", "Creates user recommendations")
+        Container_Ext(parser, "Parser", "Go", "Finds articles from various news sources")
+        Container(spark, "Spark", "Spark", "Data processing")
+        
+        ContainerDb(db, "Database", "pgvector", "Tables to store article and user embeddings")
+        ContainerDb(sss, "S3", "MinIO", "Stores articles content")
+
+        Rel(api, dwh, "Reads user recommendations")
+        Rel(api, sss, "Extract articles content")
+        Rel(api, broker, "Writes about user events")
+        Rel(recommender, broker, "Polls for user events and article creation events")
+        Rel(recommender, db, "Finds relevant articles for user")
+        Rel(recommender, dwh, "Writes actual user recommendations")
+        Rel(parser, sss, "Saves articles content")
+        Rel(spark, sss, "Retrieve articles")
+        Rel(spark, broker, "Write about processed articles")
+        Rel(spark, db, "Saves articles embeddings")
     }
 
-    Rel(person, webApp, "Visits", "JSON-RPC")
+    Rel(person, mobileApp, "Uses")
+    Rel(mobileApp, api, "Makes calls to", "JSON-RPC")
