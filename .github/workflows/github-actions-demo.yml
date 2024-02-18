@@ -1,0 +1,41 @@
+name: Render Diagrams
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  render_diagrams:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install diagrams
+
+      - name: Render usecase
+        run: python ./src/usecases.py  # Replace with your script or command
+      - name: Render context
+        run: python ./src/c4-components.py # Replace with your script or command
+      - name: Render containers
+        run: python ./src/c4-containers.py  # Replace with your script or command
+      - name: Render components
+        run: python ./src/c4-components.py  # Replace with your script or command
+
+      - name: Commit Rendered Diagrams
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Update rendered diagrams" || true
+          git push
