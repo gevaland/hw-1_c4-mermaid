@@ -1,0 +1,44 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+SHOW_PERSON_OUTLINE()
+AddRelTag("async", $lineStyle=DashedLine())
+AddRelTag("sync", $lineStyle=SolidLine())
+
+title Components - Recommendation System
+
+System_Ext(video_service, "Video Service", "Provides videos to customers")
+System_Boundary(c1, "Recommendation System") {
+    System_Boundary(c2, "API Layer") {
+        Container(rec_sys_api, "RecSys API", "REST API, Docker, Python", "Receives data from Video Service, sends personalized recommendations")
+        Container(rec_sys, "Recommendation System Core", "Spark", "Processes data, calls ML Service for recommendations")
+    }
+    System_Boundary(c3, "ML Service Layer") {
+        Container(Kubeflow, "Kubeflow", "K8s", "Manages and deploys ML models")
+        Container(model, "ML Model Service", "Spark, K8s", "Generates customer recommendations")
+        Container(airflow, "Workflow Scheduler", "Airflow", "Schedules and monitors ML workflows")
+        ContainerDb(db, "Customer Data Store", "S3", "Stores customer watch history and preferences")
+    }
+    System_Boundary(c5, "Management & Monitoring") {
+        Container(ab_platform, "A/B Testing Platform", "Spark", "Facilitates A/B testing of recommendation models")
+        Container(ab_airflow, "A/B Workflow Scheduler", "Airflow", "Manages A/B test workflows")
+        Container(metrics_platform, "Metrics Platform", "Spark", "Monitors system, calculates performance metrics")
+        ContainerDb(ab_db, "A/B Test Results Store", "S3", "Stores A/B test data and outcomes")
+    }
+}
+
+Rel(video_service, rec_sys_api, "Sends user history, Receives recommendations", "JSON/HTTPS", $tags="sync")
+Rel(rec_sys_api, rec_sys, "Forwards user history", "JSON/HTTPS", $tags="async")
+Rel(rec_sys, model, "Requests recommendations", "JDBC", $tags="async")
+Rel(rec_sys, metrics_platform, "Sends metrics", "JSON/HTTPS", $tags="async")
+Rel_Back(model, db, "Reads/Writes data", "JDBC", $tags="async")
+Rel_Back(model, airflow, "Managed by", "JSON/HTTPS", $tags="async")
+Rel_Back(model, Kubeflow, "Deploys through", "JSON/HTTPS", $tags="async")
+Rel(ab_platform, ab_db, "Reads/Writes data", "JDBC", $tags="async")
+Rel(ab_platform, Kubeflow, "Selects models", "JSON/HTTPS", $tags="sync")
+Rel(metrics_platform, ab_db, "Accesses results", "JDBC", $tags="async")
+Rel_Back(ab_platform, ab_airflow, "Managed by", "JSON/HTTPS", $tags="async")
+Rel(metrics_platform, ab_platform, "Reports performance", "JSON/HTTPS", $tags="sync")
+
+SHOW_LEGEND()
+@enduml
