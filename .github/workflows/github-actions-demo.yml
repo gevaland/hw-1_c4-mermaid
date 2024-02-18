@@ -18,6 +18,11 @@ jobs:
         with:
           python-version: 3.8
 
+      - name: Install Graphviz
+        run: |
+          sudo apt-get install graphviz  # Use the appropriate package manager for your environment
+          export PATH=$PATH:/path/to/graphviz/bin  # Replace with the actual path
+
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
