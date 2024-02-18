@@ -27,7 +27,7 @@ with Diagram("../docs/c4-containers", direction="TB",
         )
         back = Container(
             name="Бэкенд сервиса",
-            technology="",а
+            technology="",
             description="Обрабатывает запросы пользователя и возвращает ответы микросервисов",
         )
 
