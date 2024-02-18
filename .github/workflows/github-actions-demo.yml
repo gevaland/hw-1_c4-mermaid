@@ -31,7 +31,7 @@ jobs:
       - name: Render usecase
         run: python ./src/usecases.py  # Replace with your script or command
       - name: Render context
-        run: python ./src/c4-components.py # Replace with your script or command
+        run: python ./src/c4-context.py # Replace with your script or command
       - name: Render containers
         run: python ./src/c4-containers.py  # Replace with your script or command
       - name: Render components

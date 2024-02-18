@@ -1,16 +1,29 @@
-C4Context
-    accTitle: Shop
-    accDescr: Context
+from diagrams import Diagram
+from diagrams.c4 import Person, Container, Database, System, SystemBoundary, Relationship
 
-    Person(person, "Customer", "Customer who is buying a product online")
+graph_attr = {
+    "splines": "spline",
+}
 
-    System(webApp, "Shop", "Allows customers to search, view and purchase products")
-    System_Ext(emailPlatform, "Email Platform", "Email marketing platform")
-    System_Ext(cdp, "Customer Data Platform", "Customer profiling")
-    System(dwh, "Data Warehouse", "Reporting and data insights")
+with Diagram("../docs/c4-context", direction="TB", graph_attr=graph_attr):
+    # customer = Person(name="Бизнес-заказчик", description="")
+    user = Person(
+        name="Пользователь"
+    )
+    ml_service = System(name="ML конвейер", 
+                        description="Позволяет продуктивизировать  модели", 
+                        external=False)
+    
+    mainframe = System(
+        name="Онлайн кинотеатр",
+        description="ПО, данные, инфраструктура онлайн-кинотеатра",
+        external=True,
+    )
 
-    Rel(person, webApp, "Search, view and purchase products", "JSON-RPC")
-    Rel(webApp, cdp, "Send customer interaction and domain events to")
-    Rel(cdp, emailPlatform, "Send email using")
-    Rel(emailPlatform, person, "Sends email to", "SMTP")
-    Rel(webApp, dwh, "Domain events", "Broker")
+    # customer >> Relationship("Направляет гипотезы/задачи для реализации") >> ml_service
+    # ml_service >> Relationship("Предоставляет данные для оценки эффекта") >> customer
+
+    ml_service >> Relationship("Использует данные кинотеатра для разработки моделей") >> mainframe
+    mainframe >> Relationship("Использует результаты работы ML моделей") >> ml_service
+
+    user >> Relationship("Использует возможности онлайн-кинотеатра") >> mainframe

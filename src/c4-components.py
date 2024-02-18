@@ -1,26 +1,53 @@
-C4Context
-    accTitle: Web Application Container
-    accDescr: Components
+from diagrams import Diagram
+from diagrams.c4 import Person, Container, Database, System, SystemBoundary, Relationship
 
-    Person(person, "Customer", "Customer who is buying a product online")
+graph_attr = {
+    "splines": "spline",
+}
 
-    Container_Boundary(webApp, "Web Application", "") {
-        Component(landingApp, "Homepage", "HTML", "Landing")
-        Component(searchApp, "Search", "HTML", "Search")
-        Component(productApp, "Product Details", "HTML", "Product Details")
-        Component(orderApp, "Orders", "HTML", "Orders")
-    }
+with Diagram("../docs/c4-components", direction="TB", graph_attr=graph_attr):
+    user = Person(name="Пользователь")
+    
+    with SystemBoundary("ML конвейер"):
+        with SystemBoundary("ML сервис"):
+            spark = Container(name="Spark Applications", technology="Spark", description="Запуск ML моделей")
+            airflow = Container(name="Airflow", technology="", description="Оркестрация ML конвейера")
+            mlflow = Container(name="mlflow", technology="", description="Хранение ML моделей, метрик")
+        hdp = Database(name="Витрина данных для моделей", 
+                       technology="HDFS",
+                       description="Данные в структурированном и быстродоступном формате для обучения/инференса ML моделей")
+        
 
-    System_Ext(cms, "CMS", "Content Management System")
-    Container(searchApi, "Search API", "API Gateway", "API that provides product filtering")
-    Container(productApi, "Product API", "API Gateway", "API that manages product details")
-    Container(orderApi, "Orders API", "API Gateway", "API that manages customer orders")
 
-    Rel(person, landingApp, "Visits /", "HTTPS")
-    Rel(landingApp, cms, "Makes calls to")
-    Rel(person, searchApp, "Visits /search", "HTTPS")
-    Rel(searchApp, searchApi, "Makes calls to", "JSON/HTTPS")
-    Rel(person, productApp, "Visits /product/{id}", "HTTPS")
-    Rel(productApp, productApi, "Makes calls to", "JSON/HTTPS")
-    Rel(person, orderApp, "Visits /basket", "HTTPS")
-    Rel(orderApp, orderApi, "Makes calls to", "JSON/HTTPS")
+
+    with SystemBoundary("Онлайн кинотеатр"):
+        front = Container(name="Фронтенд сервиса", 
+                          technology="Not specified", 
+                          description="")
+        with SystemBoundary("Бэкенд сервиса"):
+            back = Container(name="Бэкенд сервисы",
+                            techology="Not specified",
+                            description="")
+            kafka = Container(name="Потоковая обработка данных", technology="Apache Kafka", description="Потоковая передача данных в Data Lake и HDFS")
+            dwh = Database(name="DataLake", technology="Databricks Lakehouse", description="Данные сервиса в неструктурированном формате")
+
+    user >> Relationship("Использует фронтенд") >> front
+    back >> Relationship("Забирает данные с фронта") >> front
+    front >> Relationship("Забирает результаты работы сервисов, моделей") >> back
+    kafka >> Relationship("Переносит данные") >> back
+
+
+    dwh >> Relationship("Сохраняет данные в Data Lake") >> kafka
+    hdp >> Relationship("Переносит данные в HDFS") >> kafka
+    back >> Relationship("Забирает нужные данные из хранилища") >> dwh
+
+    spark << Relationship("Использует данные из витрины") << hdp
+    # spark >> Relationship("Запускает spark приложения") >> airflow
+    airflow >> Relationship("Запускает spark приложения") >> spark
+
+    mlflow >> Relationship("Сохраняет обученные модели") >> spark
+    spark >> Relationship("Использует ML модели из mlflow") >> mlflow
+
+
+    # Add relationships to show the flow of results to downstream applications
+    spark << Relationship("Сохраняет результаты в DataLake") << dwh
