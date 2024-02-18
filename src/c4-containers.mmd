@@ -1,16 +1,35 @@
 C4Context
-    accTitle: Shop System
+    accTitle: AI DJ
     accDescr: Containers
 
-    Person(person, "Customer", "Customer who is buying a product online")
+    Person(person, "User", "User who needs to generate a playlist")
+    Rel(person, webApp, "Visits", "JSON-RPC")
 
     System_Boundary(webApp, "Shop", "Allows customers to search, view and purchase products") {
-        Container(webApp, "Web Application", "HTML", "Web frontend for buying a product")
-        Container(api, "API Application", "API Gateway", "API that manages product details")
-        ContainerDb(db, "Database", "DynamoDB", "Tables to store product and customer data")
+        Container(webApp, "Web Application", "react", "Web frontend for prompting and viewing recos")
+        Container(api, "API Application", "API Gateway", "API that manages prompt processing and reco generation")
 
-        Rel(webApp, api, "Makes calls to", "JSON-RPC")
-        Rel(api, db, "Reads and writes to", "JSON-RPC")
+        Rel(api, mlSer, "Makes calls to", "JSON/HTTP")
+        Rel(webApp, api, "Makes calls to", "JSON/HTTP")
     }
 
-    Rel(person, webApp, "Visits", "JSON-RPC")
+    System_Boundary(mlSer, "Reco Service", "Generate song recos based on DL models extracted features") {
+        Container(mlSer, "Inference API", "API Gateway", "ML models inference API")
+        Container(kafka, "Kafka", "", "Tasks and queues distribution")
+        Container(db, "Hadoop", "", "Big Data storage and processing")
+
+        Rel(mlSer, kafka, "Get songs features", "")
+        Rel(kafka, db, "Get songs data", "")
+
+    }
+
+    System_Ext(ymusic, "Yandex Music", "Musical service")
+    System_Ext(tunebat, "Tunebat.com", "Musical harmonic data")
+    Container(parser, "Parser", "", "Music web services parser")
+
+    Rel(ymusic, parser, "Parse playlist data", "")
+    Rel(tunebat, parser, "Get properties for parsed songs", "")
+
+    Rel(parser, db, "Pass songs data", "")
+
+
