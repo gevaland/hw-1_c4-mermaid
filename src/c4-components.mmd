@@ -2,25 +2,52 @@ C4Context
     accTitle: Web Application Container
     accDescr: Components
 
-    Person(person, "Customer", "Customer who is buying a product online")
+    Person(person, "User", "User who needs to generate a playlist")
 
     Container_Boundary(webApp, "Web Application", "") {
-        Component(landingApp, "Homepage", "HTML", "Landing")
-        Component(searchApp, "Search", "HTML", "Search")
-        Component(productApp, "Product Details", "HTML", "Product Details")
-        Component(orderApp, "Orders", "HTML", "Orders")
+        Component(landingApp, "Prompt Page", "HTML", "Prompt")
+        Component(PlaylistApp, "Playlist Page", "HTML", "Playlist")
     }
 
-    System_Ext(cms, "CMS", "Content Management System")
-    Container(searchApi, "Search API", "API Gateway", "API that provides product filtering")
-    Container(productApi, "Product API", "API Gateway", "API that manages product details")
-    Container(orderApi, "Orders API", "API Gateway", "API that manages customer orders")
+    Container_Boundary(apiInference, "Inference API", "") {
+        Component(apiInference, "Inference API App", "Fast API", "")
+        Component(peopleDetection, "YOLO people detection", "", "Inference pipe")
+        Component(actClassification, "VGG human activity classification", "", "Inference pipe")
+        Component(styleClassification, "VGG dress style classification", "", "Inference pipe")
+        Component(faisTextIndex, "Fais index for lyrics embeddings", "", "Inference pipe")
+        Component(embCompiler, "Extracted features embedder", "", "")
+
+    }
+
+    Container_Boundary(hadoop, "Hadoop", "") {
+        Component(hdfs, "HDFS", "", "")
+        Component(yarn, "YARN", "", "")
+        Component(spark, "Spark", "", "")
+    }
+
+    Container_Boundary(kafka, "Kafka", "") {
+        Container(kafka, "Kafka", "", "Tasks and queues distribution")
+    }
+
+    Container(parser, "Parser", "", "Music web services parser")
+    Rel(parser, hdfs, "Get songs data")
+
+    Rel(spark, hdfs, "Load data for processing")
+    Rel(spark, yarn, "Coordinate data processing tasks")
+
 
     Rel(person, landingApp, "Visits /", "HTTPS")
-    Rel(landingApp, cms, "Makes calls to")
-    Rel(person, searchApp, "Visits /search", "HTTPS")
-    Rel(searchApp, searchApi, "Makes calls to", "JSON/HTTPS")
-    Rel(person, productApp, "Visits /product/{id}", "HTTPS")
-    Rel(productApp, productApi, "Makes calls to", "JSON/HTTPS")
-    Rel(person, orderApp, "Visits /basket", "HTTPS")
-    Rel(orderApp, orderApi, "Makes calls to", "JSON/HTTPS")
+    Rel(landingApp, apiInference, "Makes calls to", "JSON/HTTP")
+    Rel(apiInference, peopleDetection, "Makes calls to", "")
+    Rel(apiInference, faisTextIndex, "Makes calls to", "")
+    Rel(peopleDetection, actClassification, "Makes calls to", "")
+    Rel(peopleDetection, styleClassification, "Makes calls to", "")
+
+    Rel(styleClassification, embCompiler, "Pass extracted features", "")
+    Rel(actClassification, embCompiler, "Pass extracted features", "")
+    Rel(faisTextIndex, embCompiler, "Pass extracted features", "")
+
+    Rel(embCompiler, kafka, "Pass embeddings to kafka topic", "")
+    Rel(kafka, spark, "Read data from kafka", "")
+
+    Rel(kafka, PlaylistApp, "Read data from kafka", "")

@@ -1,16 +1,13 @@
 C4Context
-    accTitle: Shop
+    accTitle: AI DJ
     accDescr: Context
 
-    Person(person, "Customer", "Customer who is buying a product online")
+    Person(person, "User", "User who needs to generate a playlist")
 
-    System(webApp, "Shop", "Allows customers to search, view and purchase products")
-    System_Ext(emailPlatform, "Email Platform", "Email marketing platform")
-    System_Ext(cdp, "Customer Data Platform", "Customer profiling")
+    System(webApp, "AI DJ", "Allows customers to submit an image or/and text prompt and receive generated playlist")
     System(dwh, "Data Warehouse", "Reporting and data insights")
+    System_Ext(musServices, "Musical services", "From which data is parsed to be stored")
 
-    Rel(person, webApp, "Search, view and purchase products", "JSON-RPC")
-    Rel(webApp, cdp, "Send customer interaction and domain events to")
-    Rel(cdp, emailPlatform, "Send email using")
-    Rel(emailPlatform, person, "Sends email to", "SMTP")
+    Rel(person, webApp, "Input prompt, view recommendations", "JSON-RPC")
     Rel(webApp, dwh, "Domain events", "Broker")
+    Rel(musServices, dwh, "Store parsed data", "")
