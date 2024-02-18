@@ -5,7 +5,8 @@ graph_attr = {
     "splines": "spline",
 }
 
-with Diagram("../docs/c4-context", direction="TB", graph_attr=graph_attr):
+with Diagram("../docs/c4-context", direction="TB", 
+             graph_attr=graph_attr, outformat="svg"):
     # customer = Person(name="Бизнес-заказчик", description="")
     user = Person(
         name="Пользователь"

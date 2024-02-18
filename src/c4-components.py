@@ -5,7 +5,8 @@ graph_attr = {
     "splines": "spline",
 }
 
-with Diagram("../docs/c4-components", direction="TB", graph_attr=graph_attr):
+with Diagram("../docs/c4-components", direction="TB", 
+             graph_attr=graph_attr, outformat="svg"):
     user = Person(name="Пользователь")
     
     with SystemBoundary("ML конвейер"):
