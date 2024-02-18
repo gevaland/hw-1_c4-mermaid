@@ -1,0 +1,30 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+SHOW_PERSON_OUTLINE()
+AddRelTag("sync/async", $textColor=$ARROW_FONT_COLOR, $lineColor=$ARROW_COLOR, $lineStyle=DashedLine())
+
+title Container Diagram for Recommendation System
+
+System_Ext(video_service, "Video Service", "Provides videos to customers")
+System_Boundary(c1, "Recommendation System") {
+    Container(rec_sys_api, "RecSys API", "REST API, Docker, Python", "Receives data from Video Service and sends personalized recommendations")
+    Container(rec_sys, "Recommendation System Core", "Spark", "Processes data, calls ML Service for recommendations")
+    ContainerDb(db, "Customer Data Store", "S3", "Stores customer watch history and preferences")
+    Container(model, "ML Model Service", "Spark, K8s", "Generates customer recommendations")
+    Container(ab_platform, "A/B Testing Platform", "Spark", "Facilitates A/B testing of recommendation models")
+    ContainerDb(ab_db, "A/B Test Results Store", "S3", "Stores A/B test data and outcomes")
+    Container(metrics_platform, "Metrics Platform", "Spark", "Monitors system, calculates performance metrics")
+}
+
+Rel(video_service, rec_sys_api, "Sends user history, Receives recommendations", "JSON/HTTPS")
+Rel(rec_sys_api, rec_sys, "Forwards user history", "JSON/HTTPS", $tags="sync/async")
+Rel(rec_sys, model, "Requests recommendations", "JDBC", $tags="sync/async")
+Rel(rec_sys, metrics_platform, "Sends metrics", "JSON/HTTPS", $tags="sync/async")
+Rel_Back(model, db, "Reads/Writes data", "JDBC", $tags="sync/async")
+Rel(rec_sys, ab_platform, "Chooses model", "JSON/HTTPS", $tags="sync/async")
+Rel(ab_platform, ab_db, "Reads/Writes data", "JDBC", $tags="sync/async")
+Rel_Back(metrics_platform, ab_db, "Reads/Writes data", "JDBC", $tags="sync/async")
+
+SHOW_LEGEND()
+@enduml
