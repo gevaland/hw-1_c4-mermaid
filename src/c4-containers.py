@@ -6,7 +6,7 @@ graph_attr = {
 }
 
 with Diagram("../docs/c4-containers", direction="TB", 
-             graph_attr=graph_attr, outformat="svg"):
+             graph_attr=graph_attr, outformat="svg") as diagram:
     # customer = Person(name="Бизнес-заказчик", description="")
     user = Person(name="Пользователь")
     
@@ -27,7 +27,7 @@ with Diagram("../docs/c4-containers", direction="TB",
         )
         back = Container(
             name="Бэкенд сервиса",
-            technology="",
+            technology="",а
             description="Обрабатывает запросы пользователя и возвращает ответы микросервисов",
         )
 
@@ -38,3 +38,5 @@ with Diagram("../docs/c4-containers", direction="TB",
     user >> Relationship("Использует возможности онлайн-кинотеатра") >> front
     back >> Relationship("Принимает запросы пользователя") >> front
     front >> Relationship("Использует ответы микросервисов") >> back
+
+diagram.render()  # Save diagram without opening it

@@ -6,7 +6,7 @@ graph_attr = {
 }
 
 with Diagram("../docs/c4-components", direction="TB", 
-             graph_attr=graph_attr, outformat="svg"):
+             graph_attr=graph_attr, outformat="svg") as diagram:
     user = Person(name="Пользователь")
     
     with SystemBoundary("ML конвейер"):
@@ -52,3 +52,5 @@ with Diagram("../docs/c4-components", direction="TB",
 
     # Add relationships to show the flow of results to downstream applications
     spark << Relationship("Сохраняет результаты в DataLake") << dwh
+
+diagram.render()

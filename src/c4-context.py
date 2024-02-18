@@ -6,7 +6,7 @@ graph_attr = {
 }
 
 with Diagram("../docs/c4-context", direction="TB", 
-             graph_attr=graph_attr, outformat="svg"):
+             graph_attr=graph_attr, outformat="svg") as diagram:
     # customer = Person(name="Бизнес-заказчик", description="")
     user = Person(
         name="Пользователь"
@@ -28,3 +28,5 @@ with Diagram("../docs/c4-context", direction="TB",
     mainframe >> Relationship("Использует результаты работы ML моделей") >> ml_service
 
     user >> Relationship("Использует возможности онлайн-кинотеатра") >> mainframe
+
+diagram.render()
