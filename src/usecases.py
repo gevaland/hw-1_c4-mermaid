@@ -1,7 +1,7 @@
 from diagrams import Diagram, Cluster, Edge
 from diagrams.aws.general import User, Users, TraditionalServer
 
-with Diagram("Use Case Diagram", show=True):
+with Diagram("docs/usecases", outformat="svg"):
 
     # Define actors
     business_customer = User("Бизнес-заказчик")
