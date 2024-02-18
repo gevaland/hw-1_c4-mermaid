@@ -11,10 +11,10 @@ with Diagram("docs/c4-containers", direction="TB",
     user = Person(name="Пользователь")
     
     with SystemBoundary("ML конвейер"):
-        hdp = Database(name="Витрина данных для моделей",
+        hdp = Database(name="Источник данных для моделей",
                        description="Данные в структурированном и быстродоступном формате для обучения/инференса ML моделей")
         models = Container(name="ML сервис",
-                           description="Сервис для обучения/расчета ML моделей")
+                           description="Сервис для обучения/расчета моделей\t")
         
 
 

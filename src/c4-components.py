@@ -23,13 +23,12 @@ with Diagram("docs/c4-components", direction="TB",
 
     with SystemBoundary("Онлайн кинотеатр"):
         front = Container(name="Фронтенд сервиса", 
-                          technology="Not specified", 
                           description="")
         with SystemBoundary("Бэкенд сервиса"):
             back = Container(name="Бэкенд сервисы",
                             techology="Not specified",
                             description="")
-            kafka = Container(name="Потоковая обработка данных", technology="Apache Kafka", description="Потоковая передача данных в Data Lake и HDFS")
+            kafka = Container(name="Потоковая обработка данных", technology="Apache Kafka", description="Передает большие объемы данных (логи действий и т.д.) в хранилище")
             dwh = Database(name="DataLake", technology="Databricks Lakehouse", description="Данные сервиса в неструктурированном формате")
 
     user >> Relationship("Использует фронтенд") >> front

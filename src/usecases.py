@@ -1,13 +1,14 @@
 from diagrams import Diagram, Cluster, Edge
 from diagrams.aws.general import User, Users, TraditionalServer
+from diagrams.c4 import Person, Container, Database, System, SystemBoundary, Relationship
 
 with Diagram("docs/usecases", outformat="svg"):
 
     # Define actors
-    business_customer = User("Бизнес-заказчик")
-    ml_team = Users("МЛ команда")
-    ml_service = TraditionalServer("Сервис ML Моделей")
-    online_cinema = TraditionalServer("Онлайн-кинотеатр")
+    business_customer = Person("Бизнес-заказчик")
+    ml_team = Person("МЛ команда")
+    ml_service = System("Сервис ML Моделей")
+    online_cinema = System("Онлайн-кинотеатр")
 
     # Define relations
     with Cluster("Use Cases"):

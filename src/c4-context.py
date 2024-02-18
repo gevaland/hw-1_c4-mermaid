@@ -12,7 +12,7 @@ with Diagram("docs/c4-context", direction="TB",
         name="Пользователь"
     )
     ml_service = System(name="ML конвейер", 
-                        description="Позволяет продуктивизировать  модели", 
+                        description="Позволяет продуктивизировать модели", 
                         external=False)
     
     mainframe = System(

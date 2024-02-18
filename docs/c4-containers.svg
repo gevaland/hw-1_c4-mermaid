@@ -20,92 +20,92 @@
 <polygon fill="white" stroke="#aeb6be" stroke-dasharray="5,2" points="8,-31.75 8,-369.8 318,-369.8 318,-31.75 8,-31.75"/>
 <text text-anchor="middle" x="68.5" y="-354.4" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Онлайн кинотеатр</text>
 </g>
-<!-- 2b9e6c2bcbcf4e7786188887c75a4497 -->
+<!-- b19a04b470224830aaf432e043964b2f -->
 <g id="node1" class="node">
-<title>2b9e6c2bcbcf4e7786188887c75a4497</title>
+<title>b19a04b470224830aaf432e043964b2f</title>
 <path fill="#104e8b" stroke="black" d="M202,-536C202,-536 82,-536 82,-536 76,-536 70,-530 70,-524 70,-524 70,-476 70,-476 70,-470 76,-464 82,-464 82,-464 202,-464 202,-464 208,-464 214,-470 214,-476 214,-476 214,-524 214,-524 214,-530 208,-536 202,-536"/>
 <text text-anchor="start" x="99.25" y="-500.1" font-family="Sans-Serif" font-weight="bold" font-size="12.00" fill="white">Пользователь</text>
 <text text-anchor="start" x="125.12" y="-490.95" font-family="Sans-Serif" font-size="9.00" fill="white">[Person]</text>
 </g>
-<!-- 35f564beebec4ef0bd58940a51035a2a -->
+<!-- 15fe34ad6d004dca9ba7c85437abd2b4 -->
 <g id="node4" class="node">
-<title>35f564beebec4ef0bd58940a51035a2a</title>
+<title>15fe34ad6d004dca9ba7c85437abd2b4</title>
 <polygon fill="#1874cd" stroke="black" points="214,-333.05 70,-333.05 70,-261.05 214,-261.05 214,-333.05"/>
 <text text-anchor="start" x="85.75" y="-297.15" font-family="Sans-Serif" font-weight="bold" font-size="12.00" fill="white">Фронтенд сервиса</text>
 <text text-anchor="start" x="119.5" y="-288" font-family="Sans-Serif" font-size="9.00" fill="white">[Container]</text>
 </g>
-<!-- 2b9e6c2bcbcf4e7786188887c75a4497&#45;&gt;35f564beebec4ef0bd58940a51035a2a -->
+<!-- b19a04b470224830aaf432e043964b2f&#45;&gt;15fe34ad6d004dca9ba7c85437abd2b4 -->
 <g id="edge4" class="edge">
-<title>2b9e6c2bcbcf4e7786188887c75a4497&#45;&gt;35f564beebec4ef0bd58940a51035a2a</title>
+<title>b19a04b470224830aaf432e043964b2f&#45;&gt;15fe34ad6d004dca9ba7c85437abd2b4</title>
 <path fill="none" stroke="#999999" stroke-dasharray="5,2" d="M142,-463.54C142,-430.49 142,-381.01 142,-344.76"/>
 <polygon fill="#999999" stroke="#999999" points="145.5,-345.01 142,-335.01 138.5,-345.01 145.5,-345.01"/>
 <text text-anchor="start" x="142" y="-400.27" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">Использует возможности</text>
 <text text-anchor="start" x="157.75" y="-389.02" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">онлайн&#45;кинотеатра</text>
 </g>
-<!-- e0af7444b0164304b17eadfa9419fafa -->
+<!-- a01ad4ca06f54dc5a825d7c092559f67 -->
 <g id="node2" class="node">
-<title>e0af7444b0164304b17eadfa9419fafa</title>
+<title>a01ad4ca06f54dc5a825d7c092559f67</title>
 <path fill="#1874cd" stroke="black" d="M529.6,-344.18C529.6,-349.96 487.65,-354.65 436,-354.65 384.35,-354.65 342.4,-349.96 342.4,-344.18 342.4,-344.18 342.4,-249.92 342.4,-249.92 342.4,-244.14 384.35,-239.45 436,-239.45 487.65,-239.45 529.6,-244.14 529.6,-249.92 529.6,-249.92 529.6,-344.18 529.6,-344.18"/>
 <path fill="none" stroke="black" d="M529.6,-344.18C529.6,-338.4 487.65,-333.7 436,-333.7 384.35,-333.7 342.4,-338.4 342.4,-344.18"/>
-<text text-anchor="start" x="345.25" y="-305.55" font-family="Sans-Serif" font-weight="bold" font-size="12.00" fill="white">Витрина данных для моделей</text>
+<text text-anchor="start" x="341.88" y="-305.55" font-family="Sans-Serif" font-weight="bold" font-size="12.00" fill="white">Источник данных для моделей</text>
 <text text-anchor="start" x="413.88" y="-296.4" font-family="Sans-Serif" font-size="9.00" fill="white">[Database]</text>
 <text text-anchor="start" x="362.5" y="-273.45" font-family="Sans-Serif" font-size="10.00" fill="white">Данные в структурированном и</text>
 <text text-anchor="start" x="362.12" y="-263.45" font-family="Sans-Serif" font-size="10.00" fill="white">быстродоступном формате для</text>
 <text text-anchor="start" x="358" y="-253.45" font-family="Sans-Serif" font-size="10.00" fill="white">обучения/инференса ML моделей</text>
 </g>
-<!-- afc0f87a77e045bb92d93aad0b8558d0 -->
+<!-- 2b59c9f0ef664c198a93397b065e9ae6 -->
 <g id="node5" class="node">
-<title>afc0f87a77e045bb92d93aad0b8558d0</title>
+<title>2b59c9f0ef664c198a93397b065e9ae6</title>
 <polygon fill="#1874cd" stroke="black" points="300.6,-162.95 113.4,-162.95 113.4,-47.75 300.6,-47.75 300.6,-162.95"/>
 <text text-anchor="start" x="158.62" y="-121.95" font-family="Sans-Serif" font-weight="bold" font-size="12.00" fill="white">Бэкенд сервиса</text>
 <text text-anchor="start" x="184.5" y="-112.8" font-family="Sans-Serif" font-size="9.00" fill="white">[Container]</text>
 <text text-anchor="start" x="114" y="-89.85" font-family="Sans-Serif" font-size="10.00" fill="white">Обрабатывает запросы пользователя и</text>
 <text text-anchor="start" x="123.75" y="-79.85" font-family="Sans-Serif" font-size="10.00" fill="white">возвращает ответы микросервисов</text>
 </g>
-<!-- e0af7444b0164304b17eadfa9419fafa&#45;&gt;afc0f87a77e045bb92d93aad0b8558d0 -->
+<!-- a01ad4ca06f54dc5a825d7c092559f67&#45;&gt;2b59c9f0ef664c198a93397b065e9ae6 -->
 <g id="edge3" class="edge">
-<title>e0af7444b0164304b17eadfa9419fafa&#45;&gt;afc0f87a77e045bb92d93aad0b8558d0</title>
+<title>a01ad4ca06f54dc5a825d7c092559f67&#45;&gt;2b59c9f0ef664c198a93397b065e9ae6</title>
 <path fill="none" stroke="#999999" stroke-dasharray="5,2" d="M369.15,-240.67C342.7,-218.76 312.13,-193.44 284.71,-170.72"/>
 <polygon fill="#999999" stroke="#999999" points="287.02,-168.09 277.09,-164.41 282.56,-173.49 287.02,-168.09"/>
 <text text-anchor="start" x="328" y="-202.95" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">Забирает данные для</text>
 <text text-anchor="start" x="358.75" y="-191.7" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">моделей</text>
 </g>
-<!-- 69942456076c4c0297658b1a0ef91ce2 -->
+<!-- acb8775d70b54158b2b4f3669d459dce -->
 <g id="node3" class="node">
-<title>69942456076c4c0297658b1a0ef91ce2</title>
+<title>acb8775d70b54158b2b4f3669d459dce</title>
 <polygon fill="#1874cd" stroke="black" points="529.6,-557.6 342.4,-557.6 342.4,-442.4 529.6,-442.4 529.6,-557.6"/>
 <text text-anchor="start" x="404.5" y="-516.6" font-family="Sans-Serif" font-weight="bold" font-size="12.00" fill="white">ML сервис</text>
 <text text-anchor="start" x="413.5" y="-507.45" font-family="Sans-Serif" font-size="9.00" fill="white">[Container]</text>
-<text text-anchor="start" x="336.25" y="-484.5" font-family="Sans-Serif" font-size="10.00" fill="white">Сервис для обучения/расчета ML моделей</text>
+<text text-anchor="start" x="344.12" y="-484.5" font-family="Sans-Serif" font-size="10.00" fill="white">Сервис для обучения/расчета моделей</text>
 </g>
-<!-- 69942456076c4c0297658b1a0ef91ce2&#45;&gt;e0af7444b0164304b17eadfa9419fafa -->
+<!-- acb8775d70b54158b2b4f3669d459dce&#45;&gt;a01ad4ca06f54dc5a825d7c092559f67 -->
 <g id="edge2" class="edge">
-<title>69942456076c4c0297658b1a0ef91ce2&#45;&gt;e0af7444b0164304b17eadfa9419fafa</title>
+<title>acb8775d70b54158b2b4f3669d459dce&#45;&gt;a01ad4ca06f54dc5a825d7c092559f67</title>
 <path fill="none" stroke="#999999" stroke-dasharray="5,2" d="M436,-441.95C436,-418.41 436,-390.94 436,-366.34"/>
 <polygon fill="#999999" stroke="#999999" points="439.5,-366.4 436,-356.4 432.5,-366.4 439.5,-366.4"/>
 <text text-anchor="start" x="443.88" y="-405.9" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">Сбор данных для</text>
 <text text-anchor="start" x="436" y="-394.65" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">обучения/инференса</text>
 <text text-anchor="start" x="464.12" y="-383.4" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">моделей</text>
 </g>
-<!-- 69942456076c4c0297658b1a0ef91ce2&#45;&gt;afc0f87a77e045bb92d93aad0b8558d0 -->
+<!-- acb8775d70b54158b2b4f3669d459dce&#45;&gt;2b59c9f0ef664c198a93397b065e9ae6 -->
 <g id="edge1" class="edge">
-<title>69942456076c4c0297658b1a0ef91ce2&#45;&gt;afc0f87a77e045bb92d93aad0b8558d0</title>
+<title>acb8775d70b54158b2b4f3669d459dce&#45;&gt;2b59c9f0ef664c198a93397b065e9ae6</title>
 <path fill="none" stroke="#999999" stroke-dasharray="5,2" d="M529.53,-433.8C534.56,-427.99 539.13,-421.85 543,-415.4 571.48,-367.95 571.78,-252.48 551,-223.45 494.53,-144.58 381.81,-118.21 300.77,-109.72"/>
 <polygon fill="#999999" stroke="#999999" points="527.12,-431.25 522.88,-440.96 532.25,-436.02 527.12,-431.25"/>
 <text text-anchor="start" x="565" y="-298.8" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">Забирает результаты</text>
 <text text-anchor="start" x="577.75" y="-287.55" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">работы моделей</text>
 </g>
-<!-- 35f564beebec4ef0bd58940a51035a2a&#45;&gt;afc0f87a77e045bb92d93aad0b8558d0 -->
+<!-- 15fe34ad6d004dca9ba7c85437abd2b4&#45;&gt;2b59c9f0ef664c198a93397b065e9ae6 -->
 <g id="edge6" class="edge">
-<title>35f564beebec4ef0bd58940a51035a2a&#45;&gt;afc0f87a77e045bb92d93aad0b8558d0</title>
+<title>15fe34ad6d004dca9ba7c85437abd2b4&#45;&gt;2b59c9f0ef664c198a93397b065e9ae6</title>
 <path fill="none" stroke="#999999" stroke-dasharray="5,2" d="M94.39,-260.7C73.28,-240.52 56,-214.43 69.75,-189.95 78.1,-175.08 90.29,-162.55 104,-152.09"/>
 <polygon fill="#999999" stroke="#999999" points="105.88,-155.05 111.98,-146.38 101.81,-149.35 105.88,-155.05"/>
 <text text-anchor="start" x="70" y="-202.95" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">Использует ответы</text>
 <text text-anchor="start" x="80.5" y="-191.7" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">микросервисов</text>
 </g>
-<!-- afc0f87a77e045bb92d93aad0b8558d0&#45;&gt;35f564beebec4ef0bd58940a51035a2a -->
+<!-- 2b59c9f0ef664c198a93397b065e9ae6&#45;&gt;15fe34ad6d004dca9ba7c85437abd2b4 -->
 <g id="edge5" class="edge">
-<title>afc0f87a77e045bb92d93aad0b8558d0&#45;&gt;35f564beebec4ef0bd58940a51035a2a</title>
+<title>2b59c9f0ef664c198a93397b065e9ae6&#45;&gt;15fe34ad6d004dca9ba7c85437abd2b4</title>
 <path fill="none" stroke="#999999" stroke-dasharray="5,2" d="M187.46,-163.38C177.96,-191.11 166.69,-223.99 157.75,-250.08"/>
 <polygon fill="#999999" stroke="#999999" points="154.49,-248.79 154.56,-259.38 161.12,-251.06 154.49,-248.79"/>
 <text text-anchor="start" x="176" y="-202.95" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">Принимает запросы</text>

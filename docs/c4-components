@@ -1,0 +1,38 @@
+digraph "docs/c4-components" {
+	graph [fontcolor="#2D3436" fontname="Sans-Serif" fontsize=15 label="docs/c4-components" nodesep=0.60 pad=2.0 rankdir=TB ranksep=0.75 splines=spline]
+	node [fixedsize=true fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 height=1.4 imagescale=true labelloc=b shape=box style=rounded width=1.4]
+	edge [color="#7B8894"]
+	f492a76f68fd4db69b3d280916aaa871 [label=<<font point-size="12"><b>Пользователь</b></font><br/><font point-size="9">[Person]<br/></font>> fillcolor=dodgerblue4 fixedsize=true fontcolor=white height=1 labelloc=c shape=rect style="rounded,filled" width=2]
+	subgraph "cluster_ML конвейер" {
+		graph [bgcolor=white fontname="Sans-Serif" fontsize=12 label="ML конвейер" labeljust=l margin=16 pencolor="#AEB6BE" rankdir=LR shape=box style=dashed]
+		subgraph "cluster_ML сервис" {
+			graph [bgcolor=white fontname="Sans-Serif" fontsize=12 label="ML сервис" labeljust=l margin=16 pencolor="#AEB6BE" rankdir=LR shape=box style=dashed]
+			dcb72e741990481d9014f628bc306598 [label=<<font point-size="12"><b>Spark Applications</b></font><br/><font point-size="9">[Container: Spark]<br/></font><br/><font point-size="10">Запуск ML моделей<br/><br/></font>> fillcolor=dodgerblue3 fixedsize=true fontcolor=white height=1.6 labelloc=c shape=rect style=filled width=2.6]
+			c8936f86a851459d968292d742bb1b9e [label=<<font point-size="12"><b>Airflow</b></font><br/><font point-size="9">[Container]<br/></font><br/><font point-size="10">Оркестрация ML конвейера<br/><br/></font>> fillcolor=dodgerblue3 fixedsize=true fontcolor=white height=1.6 labelloc=c shape=rect style=filled width=2.6]
+			"736b8aee5355431ebec506fca1daf58a" [label=<<font point-size="12"><b>mlflow</b></font><br/><font point-size="9">[Container]<br/></font><br/><font point-size="10">Хранение ML моделей, метрик<br/><br/></font>> fillcolor=dodgerblue3 fixedsize=true fontcolor=white height=1.6 labelloc=c shape=rect style=filled width=2.6]
+		}
+		"1bb68457355f488eb95a3d99669b0345" [label=<<font point-size="12"><b>Витрина данных для моделей</b></font><br/><font point-size="9">[Database: HDFS]<br/></font><br/><font point-size="10">Данные в структурированном и<br/>быстродоступном формате для<br/>обучения/инференса ML моделей</font>> fillcolor=dodgerblue3 fixedsize=true fontcolor=white height=1.6 labelloc=b shape=cylinder style=filled width=2.6]
+	}
+	subgraph "cluster_Онлайн кинотеатр" {
+		graph [bgcolor=white fontname="Sans-Serif" fontsize=12 label="Онлайн кинотеатр" labeljust=l margin=16 pencolor="#AEB6BE" rankdir=LR shape=box style=dashed]
+		"93162e054db74c81a6083d3dedeaf9ba" [label=<<font point-size="12"><b>Фронтенд сервиса</b></font><br/><font point-size="9">[Container]<br/></font>> fillcolor=dodgerblue3 fixedsize=true fontcolor=white height=1 labelloc=c shape=rect style=filled width=2]
+		subgraph "cluster_Бэкенд сервиса" {
+			graph [bgcolor=white fontname="Sans-Serif" fontsize=12 label="Бэкенд сервиса" labeljust=l margin=16 pencolor="#AEB6BE" rankdir=LR shape=box style=dashed]
+			d15e93d5d0774d1280d3089b36cfafd2 [label=<<font point-size="12"><b>Бэкенд сервисы</b></font><br/><font point-size="9">[Container]<br/></font>> fillcolor=dodgerblue3 fixedsize=true fontcolor=white height=1 labelloc=c shape=rect style=filled techology="Not specified" width=2]
+			"37486d2f01eb4f1c9de480cc0c71c662" [label=<<font point-size="12"><b>Потоковая обработка данных</b></font><br/><font point-size="9">[Container: Apache Kafka]<br/></font><br/><font point-size="10">Передает большие объемы данных (логи<br/>действий и т.д.) в хранилище<br/></font>> fillcolor=dodgerblue3 fixedsize=true fontcolor=white height=1.6 labelloc=c shape=rect style=filled width=2.6]
+			"2116315e6887416cb59ef6ffb74f3f6a" [label=<<font point-size="12"><b>DataLake</b></font><br/><font point-size="9">[Database: Databricks Lakehouse]<br/></font><br/><font point-size="10">Данные сервиса в неструктурированном<br/>формате<br/></font>> fillcolor=dodgerblue3 fixedsize=true fontcolor=white height=1.6 labelloc=b shape=cylinder style=filled width=2.6]
+		}
+	}
+	f492a76f68fd4db69b3d280916aaa871 -> "93162e054db74c81a6083d3dedeaf9ba" [label=<<font point-size="10">Использует фронтенд</font>> color=gray60 dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	d15e93d5d0774d1280d3089b36cfafd2 -> "93162e054db74c81a6083d3dedeaf9ba" [label=<<font point-size="10">Забирает данные с фронта</font>> color=gray60 dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	"93162e054db74c81a6083d3dedeaf9ba" -> d15e93d5d0774d1280d3089b36cfafd2 [label=<<font point-size="10">Забирает результаты<br/>работы сервисов, моделей</font>> color=gray60 dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	"37486d2f01eb4f1c9de480cc0c71c662" -> d15e93d5d0774d1280d3089b36cfafd2 [label=<<font point-size="10">Переносит данные</font>> color=gray60 dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	"2116315e6887416cb59ef6ffb74f3f6a" -> "37486d2f01eb4f1c9de480cc0c71c662" [label=<<font point-size="10">Сохраняет данные в Data<br/>Lake</font>> color=gray60 dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	"1bb68457355f488eb95a3d99669b0345" -> "37486d2f01eb4f1c9de480cc0c71c662" [label=<<font point-size="10">Переносит данные в HDFS</font>> color=gray60 dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	d15e93d5d0774d1280d3089b36cfafd2 -> "2116315e6887416cb59ef6ffb74f3f6a" [label=<<font point-size="10">Забирает нужные данные<br/>из хранилища</font>> color=gray60 dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	dcb72e741990481d9014f628bc306598 -> "1bb68457355f488eb95a3d99669b0345" [label=<<font point-size="10">Использует данные из<br/>витрины</font>> color=gray60 dir=back fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	c8936f86a851459d968292d742bb1b9e -> dcb72e741990481d9014f628bc306598 [label=<<font point-size="10">Запускает spark<br/>приложения</font>> color=gray60 dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	"736b8aee5355431ebec506fca1daf58a" -> dcb72e741990481d9014f628bc306598 [label=<<font point-size="10">Сохраняет обученные<br/>модели</font>> color=gray60 dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	dcb72e741990481d9014f628bc306598 -> "736b8aee5355431ebec506fca1daf58a" [label=<<font point-size="10">Использует ML модели из<br/>mlflow</font>> color=gray60 dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	dcb72e741990481d9014f628bc306598 -> "2116315e6887416cb59ef6ffb74f3f6a" [label=<<font point-size="10">Сохраняет результаты в<br/>DataLake</font>> color=gray60 dir=back fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+}
