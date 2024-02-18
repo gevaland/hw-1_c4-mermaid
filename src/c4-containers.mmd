@@ -1,16 +1,24 @@
 C4Context
-    accTitle: Shop System
+    accTitle: Online movie theater System
     accDescr: Containers
 
-    Person(person, "Customer", "Customer who is buying a product online")
+    Person(user, "User", "Online movie theater user")
 
-    System_Boundary(webApp, "Shop", "Allows customers to search, view and purchase products") {
-        Container(webApp, "Web Application", "HTML", "Web frontend for buying a product")
+    System_Boundary(webApp, "Online movie theater", "Allows users to scroll their feed, view and interact with films") {
+        Container(webApp, "Web Application", "HTML", "Web frontend for using service")
         Container(api, "API Application", "API Gateway", "API that manages product details")
-        ContainerDb(db, "Database", "DynamoDB", "Tables to store product and customer data")
-
+        Container(kafka, "Kafka", "Kafka", "Broker")
+        Container(spark, "Spark", "Spark", "Data processing")
+        ContainerDb(hdfs, "Distributed Database", "HDFS", "Tables to store users interactions and recommendations")
+        ContainerDb(rmc, "Recommendations Database", "MemcachedDB", "Tables to store users recommendations for feed")
+        ContainerDb(fmc, "Films Data Database", "MemcachedDB", "Tables to store films data")
         Rel(webApp, api, "Makes calls to", "JSON-RPC")
-        Rel(api, db, "Reads and writes to", "JSON-RPC")
+        Rel(api, rmc, "Reads from", "JSON-RPC")
+        Rel(api, fmc, "Reads from", "JSON-RPC")
+        Rel(api, kafka, "Writes to", "JSON-RPC")
+        Rel(spark, kafka, "Reads from", "JSON-RPC")
+        Rel(spark, hdfs, "Reads and writes to", "JSON-RPC")
+        Rel(spark, rmc, "Writes to", "JSON-RPC")
     }
 
-    Rel(person, webApp, "Visits", "JSON-RPC")
+    Rel(user, webApp, "Visits", "JSON-RPC")
