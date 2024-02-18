@@ -9,41 +9,41 @@ C4Context
         Component(openFilm, "Open film", "HTML", "Open film")
     }
 	
-	Container_Boundary(apiApp, "API Application", "") {
+    Container_Boundary(apiApp, "API Application", "") {
         Component(feedApi, "Get feed API", "API Gateway", "API that provides user's feed")
-		Component(sendStatsApi, "Send stats API", "API Gateway", "API that sends user's interactions to kafka")
-		Component(loadFilmApi, "Load film API", "API Gateway", "API that loads film data")
+        Component(sendStatsApi, "Send stats API", "API Gateway", "API that sends user's interactions to kafka")
+        Component(loadFilmApi, "Load film API", "API Gateway", "API that loads film data")
     }
 	
-	ContainerDb(rmc, "Recommendations database", "MemcachedDB", "Tables to store users recommendations for feed")
-	ContainerDb(fmc, "Films data database", "MemcachedDB", "Tables to store films data")
+    ContainerDb(rmc, "Recommendations database", "MemcachedDB", "Tables to store users recommendations for feed")
+    ContainerDb(fmc, "Films data database", "MemcachedDB", "Tables to store films data")
 	
-	Container(kafka, "Kafka", "Kafka", "Broker")
+    Container(kafka, "Kafka", "Kafka", "Broker")
 	
-	ComponentDb(hdfs, "Distributed Database", "HDFS", "Tables to store users interactions and recommendations")
+    ComponentDb(hdfs, "Distributed Database", "HDFS", "Tables to store users interactions and recommendations")
 	
-	Container_Boundary(spark, "Spark", "") {
-		Component(collectData, "Collect data", "JSON", "Collect data (interactions) from Kafka and write to HDFS")
-		Component(calculateRecs, "Calculate recommendations", "JSON", "Read interactions from HDFS and calculate recommendations")
-		Component(exportRecs, "Export recommendations to MC", "JSON", "Export recommendations from HDFS to MC")
+    Container_Boundary(spark, "Spark", "") {
+        Component(collectData, "Collect data", "JSON", "Collect data (interactions) from Kafka and write to HDFS")
+        Component(calculateRecs, "Calculate recommendations", "JSON", "Read interactions from HDFS and calculate recommendations")
+        Component(exportRecs, "Export recommendations to MC", "JSON", "Export recommendations from HDFS to MC")
 	}
 
-	%% user section
+    %% user section
     Rel(user, feedApp, "Visits /feed", "HTTPS")
     Rel(user, openFilm, "Visits /film/{id}", "HTTPS")
 	
-	%% app section
+    %% app section
     Rel(feedApp, feedApi, "Makes calls to", "JSON-RPC")
     Rel(openFilm, sendStatsApi, "Makes calls to", "JSON-RPC")
     Rel(openFilm, loadFilmApi, "Makes calls to", "JSON-RPC")
 	
-	%% api section
-	Rel(feedApi, rmc, "Reads from", "JSON-RPC")
-	Rel(sendStatsApi, kafka, "Writes to", "JSON-RPC")
-	Rel(loadFilmApi, fmc, "Read from", "JSON-RPC")
+    %% api section
+    Rel(feedApi, rmc, "Reads from", "JSON-RPC")
+    Rel(sendStatsApi, kafka, "Writes to", "JSON-RPC")
+    Rel(loadFilmApi, fmc, "Read from", "JSON-RPC")
 	
-	%% hadoop section
-	Rel(collectData, kafka, "Reads from", "JSON-RPC")
-	Rel(collectData, hdfs, "Writes to", "JSON-RPC")
-	Rel(calculateRecs, hdfs, "Reads and writes to", "JSON-RPC")
-	Rel(exportRecs, rmc, "Writes to", "JSON-RPC")
+    %% hadoop section
+    Rel(collectData, kafka, "Reads from", "JSON-RPC")
+    Rel(collectData, hdfs, "Writes to", "JSON-RPC")
+    Rel(calculateRecs, hdfs, "Reads and writes to", "JSON-RPC")
+    Rel(exportRecs, rmc, "Writes to", "JSON-RPC")

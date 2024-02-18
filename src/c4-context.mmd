@@ -7,10 +7,10 @@ C4Context
     System(webApp, "Online movie theater", "Allows users to scroll their feed, view and interact with films")
     SystemDb(rmc, "Recommendations Memcached DB", "Get feed (recommendations)")
     SystemDb(fmc, "Films Data Memcached DB", "Get films data")
-	System(dwh, "Data Warehouse", "Collect and process user's interactions")
+    System(dwh, "Data Warehouse", "Collect and process user's interactions")
 
     Rel(user, webApp, "Scroll feed, interact with films", "JSON-RPC")
     Rel(webApp, rmc, "Get cached user's feed")
     Rel(webApp, fmc, "Get films data")
     Rel(webApp, dwh, "Send user's interactions", "Broker")
-	Rel(dwh, rmc, "Cache calculated user's recommendations", "JSON-RPC")
+    Rel(dwh, rmc, "Cache calculated user's recommendations", "JSON-RPC")
