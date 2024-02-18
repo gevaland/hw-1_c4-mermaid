@@ -26,7 +26,7 @@ C4Context
         Component(collectData, "Collect data", "JSON", "Collect data (interactions) from Kafka and write to HDFS")
         Component(calculateRecs, "Calculate recommendations", "JSON", "Read interactions from HDFS and calculate recommendations")
         Component(exportRecs, "Export recommendations to MC", "JSON", "Export recommendations from HDFS to MC")
-	}
+    }
 
     %% user section
     Rel(user, feedApp, "Visits /feed", "HTTPS")
